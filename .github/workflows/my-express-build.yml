@@ -20,11 +20,13 @@ jobs:
                 registry: ghcr.io
                 username: ${{ github.actor }}
                 password: ${{ secrets.GITHUB_TOKEN }}
-              
+
+            - name: Lowercase the repo name
+              run: echo "ACTOR_LOWERCASE=$(echo ${{ github.actor }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
             - name: Build and push Docker image
               uses: docker/build-push-action@v4
               with:
                 context: .
                 push: true
-                tags: ghcr.io/${{ github.actor }}/my-express-app:latest            
+                tags: ghcr.io/${{ env.ACTOR_LOWERCASE }}/my-express-app:latest            
