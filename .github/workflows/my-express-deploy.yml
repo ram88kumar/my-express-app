@@ -1,0 +1,21 @@
+name: My Express App Deploy
+on:
+  push:
+    branches: ["main"]
+        
+  workflow_dispatch:
+jobs:
+    deploy:
+        runs-on: ubuntu-latest        
+        steps:
+            - name: Deploy latest image on EC2
+              uses: appleboy/ssh-action@v0.1.0
+              with:
+                host: ${{ secrets.EC2_HOST }}
+                username: ${{ secrets.EC2_USER }}
+                key: ${{ secrets.EC2_SSH_KEY }}
+                script: |
+                  docker pull ghcr.io/${{ github.repository }}/my-express-app:latest
+                  docker stop my-express-app || true
+                  docker rm my-express-app || true
+                  docker run -d --name my-express-app -p 80:3000 ghcr.io/${{ github.repository }}/my-express-app:latest
