@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
         permissions:
             contents: read
-            packages: write
+            packages: write            
 
         steps:
             - name: Checkout code
@@ -28,5 +28,6 @@ jobs:
                 context: .
                 push: true
                 tags: ghcr.io/${{ github.repository }}/my-express-app:latest
+
 
             
