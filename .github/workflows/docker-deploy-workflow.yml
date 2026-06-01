@@ -1,0 +1,27 @@
+name: My Express Deployment
+on:
+  push:
+    branches: ["main"]
+        
+  workflow_dispatch:
+jobs:
+    deploy:
+        runs-on: ubuntu-latest                
+
+        steps:
+            - name: Convert to lowercase
+              run: echo "REPO_NAME=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+            - name: Deploy latest  image to server
+              uses: appleboy/ssh-action@master
+              with:
+                host: ${{ secrets.EC2_HOST }}
+                username: ${{ secrets.EC2_USER }}
+                key: ${{ secrets.EC2_SSH_KEY }}
+                script: |
+                  echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+                  docker pull ghcr.io/${{ env.REPO_NAME }}:latest
+                  docker stop my-express-app || true
+                  docker rm my-express-app || true
+                  docker run -d --name my-express-app -p 80:3000 ghcr.io/${{ env.REPO_NAME }}:latest            
+            
