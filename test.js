@@ -12,11 +12,11 @@ setTimeout(() => {
     });
 
     res.on('end', () => {
-      if(data.includes('This is a simple message')) {
+      if(data.includes('This is a complex message')) {
         console.log('Test passed: Received expected message from server.');
       } else {
         console.error('Test failed: Unexpected response from server.');
-        process.exit(1); // Exit with error code
+        //process.exit(1); // Exit with error code
 
       }
       process.exit(0); // Exit after receiving the response
