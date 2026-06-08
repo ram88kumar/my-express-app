@@ -19,7 +19,7 @@ setTimeout(() => {
         process.exit(1); // Exit with error code
 
       }
-      process.exit(0); // Exit after receiving the response
+      process.exit(0); // Exit after receiving the response from main
     });
 
     }).on('error', (err) => {  
